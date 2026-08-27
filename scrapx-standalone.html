@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrapX — The Web3 Scrap Auction Protocol</title>
+  <meta name="description" content="ScrapX turns industrial scrap auctions into a transparent, on-chain marketplace — live bidding, escrowed settlements and tokenized lot receipts." />
+  <link rel="canonical" href="https://piyush4315.github.io/27.08.2026/" />
+  <meta property="og:title" content="ScrapX — The Web3 Scrap Auction Protocol" />
+  <meta property="og:description" content="Live auctions, escrowed settlements and tokenized lot receipts for industrial scrap." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#05030e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+/* ═══════════════════════════════════════════════════════════
+   SCRAPX — Web3 scrap auction protocol
+   Dark · deep purple → electric blue · neon accents · glass
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --bg: #05030e;
+  --bg-2: #0a0620;
+  --ink: #eef0ff;
+  --ink-dim: #a8aed0;
+  --ink-faint: #6b7199;
+  --purple: #7c3aed;
+  --violet: #a855f7;
+  --lilac: #c084fc;
+  --blue: #3b82f6;
+  --electric: #2563eb;
+  --sky: #38bdf8;
+  --cyan: #22d3ee;
+  --neon: #00e5ff;
+  --pink: #f472b6;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --grad-hero: linear-gradient(94deg, #c084fc 0%, #818cf8 34%, #38bdf8 68%, #22d3ee 100%);
+  --grad-btn: linear-gradient(94deg, #7c3aed, #2563eb 55%, #06b6d4);
+  --glass-bg: linear-gradient(140deg, rgba(167, 139, 250, 0.09), rgba(56, 189, 248, 0.04) 45%, rgba(255, 255, 255, 0.02));
+  --glass-border: rgba(196, 181, 253, 0.16);
+  --glass-border-hi: rgba(196, 181, 253, 0.38);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --r-lg: 22px;
+  --r-md: 16px;
+  --r-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(124, 58, 237, 0.55); color: #fff; }
+img, svg { display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+.mono { font-family: var(--font-mono); }
+.container { width: min(1180px, 92vw); margin-inline: auto; }
+
+/* ── ambient background ─────────────────────────────── */
+.bg-fx { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: radial-gradient(120% 90% at 70% -10%, #140a33 0%, var(--bg) 55%); }
+.orb { position: absolute; border-radius: 50%; filter: blur(110px); opacity: .5; animation: drift 26s ease-in-out infinite alternate; }
+.orb-purple { width: 620px; height: 620px; top: -220px; left: -160px; background: radial-gradient(circle, rgba(124, 58, 237, .65), transparent 65%); }
+.orb-blue { width: 700px; height: 700px; top: 12%; right: -280px; background: radial-gradient(circle, rgba(37, 99, 235, .5), transparent 65%); animation-delay: -8s; }
+.orb-cyan { width: 480px; height: 480px; bottom: -200px; left: 30%; background: radial-gradient(circle, rgba(34, 211, 238, .28), transparent 65%); animation-delay: -16s; }
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(60px, 50px, 0) scale(1.12); }
+}
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(168, 130, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 130, 255, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(90% 70% at 50% 20%, #000 30%, transparent 100%);
+}
+.noise {
+  position: absolute; inset: 0; opacity: .35; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+
+/* ── glass primitives ───────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 18px 50px -22px rgba(3, 0, 20, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+}
+
+/* ── typography helpers ─────────────────────────────── */
+.grad-text {
+  background: var(--grad-hero);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.eyebrow {
+  display: inline-block; font-family: var(--font-mono); font-size: 12.5px;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--cyan);
+  border: 1px solid rgba(34, 211, 238, .25); border-radius: 100px;
+  padding: 7px 16px; background: rgba(34, 211, 238, .06);
+  box-shadow: 0 0 24px -6px rgba(34, 211, 238, .35);
+  margin-bottom: 22px;
+}
+.sec-head { max-width: 720px; margin-bottom: 56px; }
+.sec-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(34px, 4.6vw, 54px); line-height: 1.06; letter-spacing: -0.02em;
+}
+.sec-sub { margin-top: 18px; color: var(--ink-dim); font-size: 17px; max-width: 560px; }
+
+/* ── buttons ────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-display); font-weight: 600; letter-spacing: .02em;
+  border-radius: 100px; border: none; transition: all .28s ease;
+  white-space: nowrap;
+}
+.btn-lg { padding: 16px 32px; font-size: 16.5px; }
+.btn-sm { padding: 10px 20px; font-size: 14px; }
+.btn-primary {
+  color: #fff; background: var(--grad-btn); background-size: 150% 100%;
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, .4), 0 12px 34px -10px rgba(124, 58, 237, .65), 0 0 30px -8px rgba(34, 211, 238, .5);
+}
+.btn-primary:hover { background-position: 90% 0; transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(168,85,247,.65), 0 18px 44px -10px rgba(124,58,237,.8), 0 0 44px -6px rgba(34,211,238,.6); }
+.btn-ghost {
+  color: var(--ink); background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(196, 181, 253, .28);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 26px -8px rgba(34, 211, 238, .55); transform: translateY(-2px); }
+.btn-arrow { transition: transform .25s; }
+.btn:hover .btn-arrow { transform: translateX(4px); }
+
+/* ── nav ────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  transition: background .35s, border-color .35s, backdrop-filter .35s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(7, 4, 20, .72);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom-color: rgba(196, 181, 253, .12);
+}
+.nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-name { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: .06em; }
+.brand-x { color: var(--cyan); text-shadow: 0 0 18px rgba(34, 211, 238, .8); }
+.nav-links { display: flex; gap: 30px; }
+.nav-links a {
+  font-size: 14.5px; font-weight: 500; color: var(--ink-dim);
+  position: relative; padding: 4px 0; transition: color .25s;
+}
+.nav-links a::after {
+  content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 0;
+  background: var(--grad-hero); border-radius: 2px; transition: width .3s;
+  box-shadow: 0 0 10px rgba(56, 189, 248, .8);
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta { display: flex; align-items: center; gap: 14px; }
+.nav-burger { display: none; background: none; border: none; width: 34px; height: 30px; position: relative; }
+.nav-burger span { position: absolute; left: 4px; right: 4px; height: 2px; background: var(--ink); border-radius: 2px; transition: .3s; }
+.nav-burger span:nth-child(1) { top: 10px; } .nav-burger span:nth-child(2) { top: 18px; }
+.nav-burger.open span:nth-child(1) { top: 14px; transform: rotate(45deg); }
+.nav-burger.open span:nth-child(2) { top: 14px; transform: rotate(-45deg); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { position: relative; padding: 172px 0 90px; }
+.hero-inner { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+.pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em;
+  color: var(--lilac); text-transform: uppercase;
+  border: 1px solid rgba(168, 85, 247, .3); background: rgba(124, 58, 237, .1);
+  padding: 8px 18px; border-radius: 100px; margin-bottom: 28px;
+  box-shadow: 0 0 30px -8px rgba(124, 58, 237, .6);
+}
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 10px var(--neon); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: .45; transform: scale(.72);} }
+.hero-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(42px, 5.6vw, 74px); line-height: 1.04; letter-spacing: -0.025em;
+  margin-bottom: 26px;
+}
+.hero-sub { color: var(--ink-dim); font-size: 17.5px; max-width: 540px; margin-bottom: 36px; }
+.hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 54px; }
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; }
+.stat-num {
+  font-family: var(--font-display); font-weight: 700; font-size: 30px;
+  color: var(--ink); text-shadow: 0 0 26px rgba(124, 58, 237, .6);
+}
+.stat-label { font-size: 12.5px; color: var(--ink-faint); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+
+/* hero visual */
+.hero-visual { position: relative; }
+.live-card { padding: 28px; position: relative; overflow: hidden; }
+.live-card::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: linear-gradient(140deg, rgba(168,85,247,.7), transparent 30%, transparent 60%, rgba(34,211,238,.7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+}
+.live-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.live-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; color: var(--cyan);
+}
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); animation: pulse 1.6s infinite; }
+.live-auction { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+.live-title { font-family: var(--font-display); font-size: 23px; font-weight: 600; margin-bottom: 18px; }
+.live-price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+.live-price {
+  font-family: var(--font-display); font-weight: 700; font-size: 33px;
+  background: var(--grad-hero); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.live-sub { font-size: 12.5px; color: var(--ink-faint); }
+.live-status {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em;
+  padding: 7px 14px; border-radius: 100px; color: var(--green);
+  border: 1px solid rgba(52, 211, 153, .35); background: rgba(52, 211, 153, .08);
+  box-shadow: 0 0 20px -6px rgba(52, 211, 153, .6);
+}
+.live-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.live-meta div { background: rgba(255, 255, 255, .035); border: 1px solid rgba(255, 255, 255, .06); border-radius: 12px; padding: 10px 12px; }
+.live-meta span { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+.live-meta b { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.live-bar { height: 6px; border-radius: 6px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+.live-bar-fill {
+  height: 100%; width: var(--w); border-radius: 6px;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  box-shadow: 0 0 14px rgba(34, 211, 238, .8);
+  animation: fillbar 1.8s .6s cubic-bezier(.2,.7,.2,1) backwards;
+}
+@keyframes fillbar { from { width: 0; } }
+.live-bar-label { margin-top: 10px; font-size: 12px; color: var(--ink-faint); }
+.live-bar-label b { color: var(--cyan); }
+
+.chip {
+  position: absolute; padding: 11px 18px; border-radius: 14px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-dim);
+  animation: float 6s ease-in-out infinite;
+}
+.chip-a { top: -26px; right: -10px; color: var(--lilac); animation-delay: 0s; }
+.chip-b { bottom: 40px; left: -34px; color: var(--sky); animation-delay: -2s; }
+.chip-c { bottom: -24px; right: 34px; color: var(--cyan); animation-delay: -4s; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+.hero-scroll { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); }
+.hero-scroll span {
+  display: block; width: 24px; height: 40px; border: 2px solid rgba(196, 181, 253, .35);
+  border-radius: 14px; position: relative;
+}
+.hero-scroll span::after {
+  content: ""; position: absolute; top: 7px; left: 50%; width: 4px; height: 8px;
+  margin-left: -2px; border-radius: 4px; background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan); animation: scrolldot 1.8s infinite;
+}
+@keyframes scrolldot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+
+/* ── ticker ─────────────────────────────────────────── */
+.ticker {
+  border-block: 1px solid rgba(196, 181, 253, .12);
+  background: rgba(10, 6, 32, .5); backdrop-filter: blur(8px);
+  overflow: hidden; padding: 13px 0; position: relative;
+}
+.ticker::before, .ticker::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+}
+.ticker::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+.ticker::after { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+.ticker-track { display: flex; gap: 54px; width: max-content; animation: ticker 46s linear infinite; }
+.ticker:hover .ticker-track { animation-play-state: paused; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+.ticker-item { display: flex; gap: 12px; align-items: center; font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-faint); white-space: nowrap; }
+.ticker-item b { color: var(--ink); font-weight: 500; }
+.ticker-item em { font-style: normal; color: var(--cyan); }
+.ticker-item .up { color: var(--green); }
+
+/* ── sections ───────────────────────────────────────── */
+.section { padding: 110px 0; position: relative; }
+
+/* ── tokenomics ─────────────────────────────────────── */
+.token-grid { display: grid; grid-template-columns: 460px 1fr; gap: 34px; align-items: start; }
+.token-chart-card { padding: 34px; }
+.donut-wrap { position: relative; width: 250px; margin: 6px auto 26px; filter: drop-shadow(0 0 26px rgba(124, 58, 237, .35)); }
+.donut { width: 100%; transform: rotate(-90deg); }
+.donut circle.seg { fill: none; stroke-width: 22; transition: stroke-width .25s, opacity .25s; cursor: pointer; }
+.donut circle.seg:hover { stroke-width: 27; }
+.donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.donut-supply { font-family: var(--font-display); font-weight: 700; font-size: 34px; background: var(--grad-hero); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.donut-label { font-size: 11px; color: var(--ink-faint); letter-spacing: .1em; text-transform: uppercase; line-height: 1.5; }
+.legend { list-style: none; display: grid; gap: 10px; }
+.legend li { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--ink-dim); }
+.legend .sw { width: 12px; height: 12px; border-radius: 4px; flex: none; box-shadow: 0 0 10px var(--sc); }
+.legend .pct { margin-left: auto; font-family: var(--font-mono); font-size: 13px; color: var(--ink); }
+.token-side { display: grid; gap: 22px; }
+.token-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.metric { padding: 18px 20px; border-radius: var(--r-md); display: flex; flex-direction: column; gap: 6px; }
+.metric-k { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+.metric-v { font-family: var(--font-display); font-weight: 600; font-size: 16.5px; }
+.utility-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.utility { padding: 24px; display: flex; gap: 16px; border-radius: var(--r-md); }
+.utility:hover { border-color: var(--glass-border-hi); transform: translateY(-3px); box-shadow: 0 24px 60px -24px rgba(124, 58, 237, .55); }
+.utility-icon {
+  flex: none; width: 44px; height: 44px; border-radius: 13px;
+  display: grid; place-items: center; font-size: 19px; color: var(--c);
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+  box-shadow: 0 0 22px -6px var(--c);
+}
+.utility h4 { font-family: var(--font-display); font-size: 16.5px; margin-bottom: 6px; }
+.utility p { font-size: 13.5px; color: var(--ink-dim); }
+
+/* ── roadmap ────────────────────────────────────────── */
+.timeline { position: relative; max-width: 980px; margin-inline: auto; padding-left: 60px; }
+.timeline-line {
+  position: absolute; left: 24px; top: 12px; bottom: 12px; width: 2px;
+  background: linear-gradient(180deg, var(--violet), var(--electric) 45%, var(--cyan));
+  box-shadow: 0 0 22px rgba(99, 102, 241, .7); border-radius: 2px; opacity: .8;
+}
+.phase { display: flex; gap: 0; margin-bottom: 30px; position: relative; padding: 0; overflow: visible; }
+.phase-node {
+  position: absolute; left: -60px; top: 26px; width: 50px; height: 50px;
+  border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  background: linear-gradient(140deg, #1b1140, #0c1030);
+  border: 1px solid rgba(168, 85, 247, .5); color: var(--lilac);
+  box-shadow: 0 0 24px -4px rgba(124, 58, 237, .75); z-index: 2;
+}
+.phase.live .phase-node { border-color: var(--cyan); color: var(--neon); box-shadow: 0 0 30px -2px rgba(0, 229, 255, .8); }
+.phase-pulse { position: absolute; inset: -7px; border-radius: 50%; border: 1px solid var(--cyan); opacity: .7; animation: ring 2.2s infinite; }
+@keyframes ring { 0% { transform: scale(.85); opacity: .8; } 100% { transform: scale(1.35); opacity: 0; } }
+.phase-body { padding: 30px 34px; flex: 1; }
+.phase:hover { border-color: var(--glass-border-hi); transform: translateX(6px); box-shadow: 0 26px 70px -28px rgba(124, 58, 237, .6); }
+.phase-tags { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+.phase-q { font-family: var(--font-mono); font-size: 12px; color: var(--sky); letter-spacing: .12em; }
+.phase-status { font-size: 11.5px; font-family: var(--font-mono); letter-spacing: .1em; color: var(--ink-faint); text-transform: uppercase; }
+.phase-status.is-live { color: var(--green); text-shadow: 0 0 14px rgba(52, 211, 153, .7); }
+.phase h3 { font-family: var(--font-display); font-size: 25px; font-weight: 700; margin-bottom: 10px; }
+.phase p { color: var(--ink-dim); font-size: 14.5px; max-width: 640px; }
+.phase-list { list-style: none; margin-top: 16px; display: grid; gap: 8px; }
+.phase-list li { font-size: 13.5px; color: var(--ink-dim); display: flex; gap: 10px; align-items: center; }
+.phase-list li::before { content: "▸"; color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
+
+/* ── ledger chips / summaries ───────────────────────── */
+.ledger-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px; }
+.ledger-chip { padding: 20px 24px; border-radius: var(--r-md); }
+.ledger-chip .lc-k { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+.ledger-chip .lc-v { font-family: var(--font-display); font-weight: 700; font-size: 25px; margin-top: 5px; background: var(--grad-hero); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ledger-chip .lc-s { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+
+/* ── tables ─────────────────────────────────────────── */
+.table-panel { overflow: hidden; }
+.table-top { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 22px 26px; border-bottom: 1px solid rgba(196, 181, 253, .12); flex-wrap: wrap; }
+.table-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+.table-scroll { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; min-width: 880px; }
+.data-table th {
+  text-align: left; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint);
+  padding: 14px 18px; border-bottom: 1px solid rgba(196, 181, 253, .12); white-space: nowrap;
+}
+.data-table td { padding: 15px 18px; border-bottom: 1px solid rgba(196, 181, 253, .07); font-size: 14px; color: var(--ink-dim); white-space: nowrap; }
+.data-table tbody tr { transition: background .2s; cursor: pointer; }
+.data-table tbody tr:hover { background: rgba(124, 58, 237, .09); }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table .num { text-align: right; font-family: var(--font-mono); font-size: 13px; }
+.data-table th.num { text-align: right; }
+.data-table .strong { color: var(--ink); font-weight: 600; }
+.lot-name { white-space: normal; min-width: 230px; max-width: 330px; color: var(--ink); font-weight: 500; }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 100px;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+.badge.settled { color: var(--green); background: rgba(52, 211, 153, .08); border: 1px solid rgba(52, 211, 153, .3); }
+.badge.partial { color: var(--amber); background: rgba(251, 191, 36, .08); border: 1px solid rgba(251, 191, 36, .3); }
+.badge.pending { color: var(--pink); background: rgba(244, 114, 182, .08); border: 1px solid rgba(244, 114, 182, .3); }
+.row-link { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); opacity: .75; transition: opacity .2s, transform .2s; display: inline-block; }
+.data-table tbody tr:hover .row-link { opacity: 1; transform: translateX(3px); }
+.table-foot { padding: 16px 26px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); border-top: 1px solid rgba(196, 181, 253, .12); display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+
+/* inputs + filters */
+.input {
+  background: rgba(255, 255, 255, .045); border: 1px solid rgba(196, 181, 253, .22);
+  border-radius: 100px; color: var(--ink); font-family: var(--font-body); font-size: 14px;
+  padding: 11px 20px; outline: none; transition: border-color .25s, box-shadow .25s;
+  min-width: 200px;
+}
+.input:focus { border-color: var(--cyan); box-shadow: 0 0 22px -6px rgba(34, 211, 238, .6); }
+.input::placeholder { color: var(--ink-faint); }
+select.input {
+  appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2322d3ee' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 18px center;
+}
+select.input option { background: #0a0620; color: var(--ink); }
+.lot-controls { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
+.lot-controls-right { display: flex; gap: 12px; flex-wrap: wrap; }
+.chip-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.f-chip {
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .06em;
+  padding: 9px 18px; border-radius: 100px; color: var(--ink-dim);
+  background: rgba(255, 255, 255, .04); border: 1px solid rgba(196, 181, 253, .2);
+  transition: all .25s;
+}
+.f-chip:hover { color: var(--ink); border-color: var(--glass-border-hi); }
+.f-chip.active {
+  color: #fff; background: var(--grad-btn); border-color: transparent;
+  box-shadow: 0 0 24px -6px rgba(124, 58, 237, .8);
+}
+.active-filter { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 13px; color: var(--lilac); border: 1px dashed rgba(192, 132, 252, .45); border-radius: 100px; padding: 7px 8px 7px 18px; background: rgba(124, 58, 237, .08); }
+.active-filter[hidden] { display: none; }
+.active-filter button { background: rgba(192, 132, 252, .16); border: none; color: var(--lilac); width: 24px; height: 24px; border-radius: 50%; font-size: 11px; transition: background .2s; }
+.active-filter button:hover { background: rgba(192, 132, 252, .35); }
+
+/* ── modal ──────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
+  background: rgba(4, 2, 14, .72); backdrop-filter: blur(10px);
+  padding: 22px; animation: fadein .25s;
+}
+.modal-backdrop[hidden] { display: none; }
+@keyframes fadein { from { opacity: 0; } }
+.modal { width: min(600px, 100%); max-height: 86vh; overflow-y: auto; padding: 36px; position: relative; border-radius: 26px; animation: pop .3s cubic-bezier(.2,.9,.3,1.2); }
+@keyframes pop { from { transform: scale(.92) translateY(16px); opacity: 0; } }
+.modal-close { position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, .06); border: 1px solid rgba(196, 181, 253, .25); color: var(--ink-dim); font-size: 13px; transition: all .2s; }
+.modal-close:hover { color: var(--pink); border-color: var(--pink); }
+.modal-eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .16em; color: var(--cyan); text-transform: uppercase; margin-bottom: 10px; }
+.modal h3 { font-family: var(--font-display); font-size: 25px; font-weight: 700; line-height: 1.25; margin-bottom: 6px; }
+.modal-buyer { color: var(--ink-dim); font-size: 14px; margin-bottom: 24px; }
+.modal-buyer b { color: var(--lilac); }
+.modal-price { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+.modal-price .big { font-family: var(--font-display); font-size: 34px; font-weight: 700; background: var(--grad-hero); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.modal-price .small { font-size: 13px; color: var(--ink-faint); }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.modal-cell { background: rgba(255, 255, 255, .035); border: 1px solid rgba(255, 255, 255, .06); border-radius: 14px; padding: 13px 16px; }
+.modal-cell span { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+.modal-cell b { font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--ink); }
+.modal-progress-label { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-faint); margin-bottom: 8px; }
+.modal-progress-label b { color: var(--cyan); }
+
+/* ── team ───────────────────────────────────────────── */
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.team-card { padding: 30px 26px; text-align: center; position: relative; overflow: hidden; }
+.team-card::before {
+  content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 130px; border-radius: 50%; filter: blur(46px); opacity: .5;
+  background: radial-gradient(circle, var(--tc, var(--purple)), transparent 70%);
+  transition: opacity .3s;
+}
+.team-card:hover { border-color: var(--glass-border-hi); transform: translateY(-6px); box-shadow: 0 30px 70px -26px rgba(124, 58, 237, .6); }
+.team-card:hover::before { opacity: .85; }
+.avatar {
+  width: 84px; height: 84px; margin: 0 auto 18px; border-radius: 50%;
+  display: grid; place-items: center; position: relative;
+  font-family: var(--font-display); font-weight: 700; font-size: 26px; color: #fff;
+  background: linear-gradient(140deg, var(--a1), var(--a2));
+  box-shadow: 0 10px 30px -8px color-mix(in srgb, var(--a1) 65%, transparent);
+}
+.avatar::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--a2) 55%, transparent); }
+.team-card h4 { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
+.team-role { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin: 6px 0 12px; }
+.team-bio { font-size: 13.5px; color: var(--ink-dim); }
+.team-socials { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+.team-socials a {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid rgba(196, 181, 253, .22); color: var(--ink-dim); transition: all .25s;
+}
+.team-socials a:hover { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 18px -4px rgba(34, 211, 238, .7); transform: translateY(-2px); }
+.team-socials svg { fill: currentColor; }
+
+/* ── community ──────────────────────────────────────── */
+.comm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 26px; }
+.comm-card { padding: 28px 24px; display: block; position: relative; overflow: hidden; }
+.comm-card:hover { border-color: var(--glass-border-hi); transform: translateY(-5px); box-shadow: 0 26px 60px -24px rgba(37, 99, 235, .65); }
+.comm-icon {
+  width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center;
+  color: var(--c); margin-bottom: 18px;
+  background: color-mix(in srgb, var(--c) 11%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 34%, transparent);
+  box-shadow: 0 0 26px -8px var(--c);
+}
+.comm-card h4 { font-family: var(--font-display); font-size: 18px; margin-bottom: 6px; }
+.comm-card p { font-size: 13px; color: var(--ink-dim); margin-bottom: 16px; }
+.comm-stat { font-family: var(--font-mono); font-size: 12px; color: var(--cyan); }
+.newsletter { padding: 38px 42px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; border-radius: 26px; position: relative; overflow: hidden; }
+.newsletter::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 120% at 15% 0%, rgba(124, 58, 237, .22), transparent 60%), radial-gradient(50% 120% at 90% 100%, rgba(34, 211, 238, .16), transparent 60%);
+}
+.newsletter-copy { position: relative; }
+.newsletter h3 { font-family: var(--font-display); font-size: 25px; font-weight: 700; margin-bottom: 8px; }
+.newsletter p { color: var(--ink-dim); font-size: 14.5px; max-width: 420px; }
+.newsletter-form { display: flex; gap: 12px; position: relative; flex-wrap: wrap; }
+.newsletter-form .input { min-width: 260px; }
+.newsletter-ok { position: relative; font-family: var(--font-mono); font-size: 13px; color: var(--green); }
+
+/* ── footer ─────────────────────────────────────────── */
+.footer { border-top: 1px solid rgba(196, 181, 253, .12); background: rgba(6, 3, 18, .6); backdrop-filter: blur(12px); padding: 60px 0 28px; }
+.footer-inner { display: flex; justify-content: space-between; gap: 44px; flex-wrap: wrap; margin-bottom: 44px; }
+.footer-brand p { margin-top: 16px; color: var(--ink-faint); font-size: 13.5px; max-width: 300px; }
+.footer-cols { display: flex; gap: 64px; flex-wrap: wrap; }
+.footer-cols h5 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+.footer-cols a { display: block; font-size: 14px; color: var(--ink-dim); padding: 5px 0; transition: color .2s; }
+.footer-cols a:hover { color: var(--cyan); }
+.footer-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(196, 181, 253, .09); font-size: 12.5px; color: var(--ink-faint); }
+.footer-src { font-size: 11px; }
+
+/* ── reveal animations ──────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; }
+.d3 { transition-delay: .24s; } .d4 { transition-delay: .32s; }
+
+/* ── responsive ─────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 66px; }
+  .hero-visual { max-width: 560px; }
+  .chip-b { left: -8px; }
+  .token-grid { grid-template-columns: 1fr; }
+  .token-metrics { grid-template-columns: repeat(2, 1fr); }
+  .comm-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .ledger-chips { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 840px) {
+  .nav-links {
+    position: fixed; inset: 64px 16px auto 16px; flex-direction: column; gap: 4px;
+    background: rgba(9, 5, 26, .92); backdrop-filter: blur(20px);
+    border: 1px solid rgba(196, 181, 253, .18); border-radius: 20px; padding: 18px;
+    transform: translateY(-16px); opacity: 0; pointer-events: none; transition: .3s;
+  }
+  .nav-links.open { transform: none; opacity: 1; pointer-events: auto; }
+  .nav-links a { padding: 12px 14px; border-radius: 12px; }
+  .nav-links a:hover { background: rgba(124, 58, 237, .14); }
+  .nav-burger { display: block; }
+  .nav-cta .btn { display: none; }
+}
+@media (max-width: 640px) {
+  .hero { padding-top: 138px; }
+  .hero-stats { gap: 22px 34px; }
+  .live-meta { grid-template-columns: 1fr 1fr; }
+  .utility-list { grid-template-columns: 1fr; }
+  .timeline { padding-left: 46px; }
+  .timeline-line { left: 19px; }
+  .phase-node { left: -46px; width: 40px; height: 40px; font-size: 13px; }
+  .team-grid, .comm-grid, .ledger-chips { grid-template-columns: 1fr; }
+  .newsletter { padding: 30px 24px; }
+  .chip-a { right: 0; top: -20px; } .chip-c { right: 8px; }
+  .phase-body { padding: 24px 20px; }
+  .section { padding: 84px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+</style>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9v14L16 30 3 23V9z' fill='%237c3aed'/%3E%3Cpath d='M18.5 8 11 18h4.2L13 24l8-10h-4.4z' fill='%2322d3ee'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- ambient background -->
+  <div class="bg-fx" aria-hidden="true">
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-blue"></div>
+    <div class="orb orb-cyan"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- ══════════ NAV ══════════ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner container">
+      <a href="#home" class="brand">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <defs><linearGradient id="lg-brand" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/>
+          </linearGradient></defs>
+          <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="url(#lg-brand)" stroke-width="2"/>
+          <path d="M18.5 8 11 18h4.2L13 24l8-10h-4.4z" fill="#22d3ee"/>
+        </svg>
+        <span class="brand-name">SCRAP<span class="brand-x">X</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#tokenomics">Tokenomics</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#bidders">Bidders</a>
+        <a href="#lots">Lots</a>
+        <a href="#team">Team</a>
+        <a href="#community">Community</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="#lots" class="btn btn-primary btn-sm">Launch App <span class="btn-arrow">→</span></a>
+        <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <div class="pill reveal">
+            <span class="pill-dot"></span> New Scrap Sale Portal · Auction Series 21977–21980 Settled
+          </div>
+          <h1 class="hero-title reveal d1">
+            Industrial scrap,<br />
+            <span class="grad-text">re‑engineered on‑chain.</span>
+          </h1>
+          <p class="hero-sub reveal d2">
+            ScrapX is the Web3 marketplace for industrial scrap — live auctions, escrowed
+            security deposits, on‑chain settlement and tokenized lot receipts. Zero opacity.
+            Zero friction. Maximum recovery value.
+          </p>
+          <div class="hero-ctas reveal d3">
+            <a href="#lots" class="btn btn-primary btn-lg">Explore Lots <span class="btn-arrow">→</span></a>
+            <a href="#tokenomics" class="btn btn-ghost btn-lg">View Tokenomics</a>
+          </div>
+          <div class="hero-stats reveal d4">
+            <div class="stat">
+              <span class="stat-num" data-count="37">0</span>
+              <span class="stat-label">Lots auctioned</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="13">0</span>
+              <span class="stat-label">Verified bidders</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="1.77" data-prefix="₹" data-suffix=" Cr" data-decimals="2">0</span>
+              <span class="stat-label">Gross auction value</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="4">0</span>
+              <span class="stat-label">Auction series</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal d2">
+          <div class="glass live-card">
+            <div class="live-head">
+              <span class="live-badge"><span class="live-dot"></span> HAMMERED · LOT 2007</span>
+              <span class="live-auction">Auction 21977</span>
+            </div>
+            <h3 class="live-title">Scrap Power Transformer</h3>
+            <div class="live-price-row">
+              <div>
+                <div class="live-price">₹38,57,116</div>
+                <div class="live-sub">Final hammer price · settled on-chain</div>
+              </div>
+              <div class="live-status ok">SETTLED</div>
+            </div>
+            <div class="live-meta">
+              <div><span>Buyer</span><b>Shar Jahan Traders</b></div>
+              <div><span>Escrow</span><b>SD ₹9,64,279</b></div>
+              <div><span>Invoice</span><b class="mono">DR2640100024</b></div>
+            </div>
+            <div class="live-bar"><div class="live-bar-fill" style="--w:100%"></div></div>
+            <div class="live-bar-label">Settlement <b>100%</b> · final payment received 13.08.2026</div>
+          </div>
+          <div class="glass chip chip-a">⚡ Escrowed deposits · auto‑release</div>
+          <div class="glass chip chip-b">◈ Lot receipts minted as NFTs</div>
+          <div class="glass chip chip-c">▲ 93% value recovery vs. yard baseline</div>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ══════════ TICKER ══════════ -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="tickerTrack"></div>
+    </div>
+
+    <!-- ══════════ TOKENOMICS ══════════ -->
+    <section class="section" id="tokenomics">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 02 · Tokenomics</span>
+          <h2 class="sec-title">One token.<br /><span class="grad-text">Every scrap transaction.</span></h2>
+          <p class="sec-sub">$SCRX powers collateral, rewards, governance and fee discounts across the entire ScrapX auction protocol.</p>
+        </div>
+
+        <div class="token-grid">
+          <div class="glass token-chart-card reveal">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 200 200" class="donut" id="donut"></svg>
+              <div class="donut-center">
+                <span class="donut-supply">1B</span>
+                <span class="donut-label">Total supply<br/>$SCRX</span>
+              </div>
+            </div>
+            <ul class="legend" id="legend"></ul>
+          </div>
+
+          <div class="token-side">
+            <div class="token-metrics reveal d1">
+              <div class="glass metric"><span class="metric-k">Token</span><span class="metric-v grad-text">$SCRX</span></div>
+              <div class="glass metric"><span class="metric-k">Standard</span><span class="metric-v">ERC-20 · L2 native</span></div>
+              <div class="glass metric"><span class="metric-k">Total supply</span><span class="metric-v">1,000,000,000</span></div>
+              <div class="glass metric"><span class="metric-k">TGE target</span><span class="metric-v">Q1 2027</span></div>
+            </div>
+            <div class="utility-list">
+              <div class="glass utility reveal d1">
+                <div class="utility-icon" style="--c:#a855f7">⬡</div>
+                <div><h4>Bid collateral</h4><p>Stake $SCRX instead of cash security deposits — capital stays liquid while you bid.</p></div>
+              </div>
+              <div class="glass utility reveal d2">
+                <div class="utility-icon" style="--c:#60a5fa">◈</div>
+                <div><h4>Settlement rail</h4><p>Final payments clear through escrow smart contracts with automatic GST / TDS splits.</p></div>
+              </div>
+              <div class="glass utility reveal d3">
+                <div class="utility-icon" style="--c:#22d3ee">✦</div>
+                <div><h4>Rewards & fee burns</h4><p>Earn cashback on settled lots; 50% of protocol fees are burned every epoch.</p></div>
+              </div>
+              <div class="glass utility reveal d4">
+                <div class="utility-icon" style="--c:#f472b6">✳</div>
+                <div><h4>DAO governance</h4><p>Vote on new yard listings, inspection oracles and reserve parameters.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ROADMAP ══════════ -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 03 · Roadmap</span>
+          <h2 class="sec-title">Four phases.<br /><span class="grad-text">Zero compromise.</span></h2>
+          <p class="sec-sub">From first hammer to a fully decentralized scrap economy — the path is live.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-line" aria-hidden="true"></div>
+
+          <article class="phase glass reveal live">
+            <div class="phase-node"><span class="phase-pulse"></span>01</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q3 2026</span><span class="phase-status is-live">● Live now</span></div>
+              <h3>Ignition</h3>
+              <p>Portal launch with KYC-verified bidder onboarding, digital bid sheets and the first scrap auction series — 37 lots across transformers, conductors and copper windings already settled.</p>
+              <ul class="phase-list">
+                <li>Bidder registry & wallet-linked KYC</li>
+                <li>Security deposit escrow rails</li>
+                <li>Combined bid sheet · auctions 21977–21980</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">02</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q4 2026</span><span class="phase-status">Building</span></div>
+              <h3>Auction Engine</h3>
+              <p>Real-time bidding engine with smart-contract escrow, auto-settlement and inspection oracles — every hammer strike recorded immutably.</p>
+              <ul class="phase-list">
+                <li>Live bidding with sub-second price feed</li>
+                <li>Auto GST / TDS split on settlement</li>
+                <li>Lot inspection reports & provenance hash</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">03</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q1 2027</span><span class="phase-status">Planned</span></div>
+              <h3>Tokenization</h3>
+              <p>$SCRX token generation event. Every won lot mints a transferable on-chain receipt — scrap becomes a liquid, tradable asset class.</p>
+              <ul class="phase-list">
+                <li>$SCRX TGE · 10% public allocation</li>
+                <li>Lot-backed NFT receipts</li>
+                <li>Staking for priority auction access</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">04</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q2–Q3 2027</span><span class="phase-status">Vision</span></div>
+              <h3>Scale & DAO</h3>
+              <p>Multi-yard logistics network, cross-chain settlement and community governance. The scrap economy runs itself.</p>
+              <ul class="phase-list">
+                <li>50+ partner scrapyards onboarded</li>
+                <li>Cross-chain payments (BTC, SOL rails)</li>
+                <li>ScrapX DAO · treasury goes community-run</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BIDDERS ══════════ -->
+    <section class="section" id="bidders">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 04 · Bidder Details</span>
+          <h2 class="sec-title">The syndicate<br /><span class="grad-text">behind the hammer.</span></h2>
+          <p class="sec-sub">Every bidder on ScrapX is KYC-verified with an on-chain settlement record. Select any bidder to inspect their lots.</p>
+        </div>
+
+        <div class="ledger-chips reveal" id="bidderSummary"></div>
+
+        <div class="glass table-panel reveal d1">
+          <div class="table-top">
+            <h3 class="table-title">Registered bidders · Series 21977–21980</h3>
+            <input type="search" class="input" id="bidderSearch" placeholder="Search bidder…" />
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Bidder</th><th class="num">Lots won</th>
+                  <th class="num">Material value</th><th class="num">Total receivables</th>
+                  <th class="num">SD received</th><th class="num">Final payment</th><th>Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="bidderRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ LOTS ══════════ -->
+    <section class="section" id="lots">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 05 · Lot Details</span>
+          <h2 class="sec-title">Every lot,<br /><span class="grad-text">fully on-chain.</span></h2>
+          <p class="sec-sub">Live registry from the combined bid sheet — hammer rates, deposits and settlement state for all 37 lots.</p>
+        </div>
+
+        <div class="lot-controls reveal">
+          <div class="chip-row" id="auctionChips"></div>
+          <div class="lot-controls-right">
+            <select class="input" id="statusFilter">
+              <option value="all">All statuses</option>
+              <option value="settled">Settled</option>
+              <option value="partial">Partially settled</option>
+              <option value="pending">Pending payment</option>
+            </select>
+            <input type="search" class="input" id="lotSearch" placeholder="Search lot, material, buyer…" />
+          </div>
+        </div>
+        <div class="active-filter" id="bidderFilterTag" hidden>
+          <span></span><button id="clearBidderFilter">✕</button>
+        </div>
+
+        <div class="glass table-panel reveal d1">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Lot</th><th>Auction</th><th>Material</th><th>Buyer</th>
+                  <th class="num">Qty</th><th class="num">Rate</th><th class="num">Mat. value</th><th>Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="lotRows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot" id="lotFoot"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ TEAM ══════════ -->
+    <section class="section" id="team">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 06 · Team</span>
+          <h2 class="sec-title">Builders from<br /><span class="grad-text">markets & chains.</span></h2>
+          <p class="sec-sub">A crew spanning auction houses, protocol engineering and industrial logistics.</p>
+        </div>
+        <div class="team-grid" id="teamGrid"></div>
+      </div>
+    </section>
+
+    <!-- ══════════ COMMUNITY ══════════ -->
+    <section class="section" id="community">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 07 · Community</span>
+          <h2 class="sec-title">Join the<br /><span class="grad-text">scrap economy.</span></h2>
+          <p class="sec-sub">Bidders, yards, recyclers and degens — the protocol is built with you, for you.</p>
+        </div>
+
+        <div class="comm-grid">
+          <a class="glass comm-card reveal" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#8b5cf6">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M19.3 5.3A16.9 16.9 0 0 0 15.1 4l-.2.4c1.5.4 2.9 1 4.1 1.9a13.7 13.7 0 0 0-12 0C8.2 5.4 9.6 4.8 11.1 4.4L10.9 4a16.9 16.9 0 0 0-4.2 1.3C4 9.2 3.3 13 3.6 16.7c1.7 1.3 3.4 2 5 2.5l.8-1.3c-.9-.3-1.7-.7-2.4-1.2l.6-.4a12 12 0 0 0 10.8 0l.6.4c-.8.5-1.6.9-2.4 1.2l.8 1.3c1.7-.5 3.3-1.2 5-2.5.4-4.3-.7-8-3.1-11.4ZM9.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg>
+            </div>
+            <h4>Discord</h4><p>Auction war-room, lot alerts & support.</p>
+            <span class="comm-stat">12,400+ members</span>
+          </a>
+          <a class="glass comm-card reveal d1" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#38bdf8">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.2l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2Zm-1.1 18h1.7L7.1 3.8H5.3L17.8 20Z"/></svg>
+            </div>
+            <h4>X / Twitter</h4><p>Hammer results, roadmap & alpha.</p>
+            <span class="comm-stat">38,000+ followers</span>
+          </a>
+          <a class="glass comm-card reveal d2" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#22d3ee">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M21.9 4.6c.3 5.1.3 10.2-.1 15.3-.1.9-.8 1.6-1.7 1.7-5.2.4-10.4.4-15.6 0-.9-.1-1.6-.8-1.7-1.7-.4-5.1-.4-10.2.1-15.3.1-.9.8-1.6 1.7-1.7C9.7 2.5 14.9 2.5 20 3c.9.1 1.7.8 1.9 1.6ZM9.6 7.2 12 12l2.4-4.8h1.8l-3.4 6.4v4h-1.6v-4L7.8 7.2h1.8Z"/></svg>
+            </div>
+            <h4>Telegram</h4><p>Instant lot drop notifications.</p>
+            <span class="comm-stat">9,100+ subscribers</span>
+          </a>
+          <a class="glass comm-card reveal d3" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#f472b6">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 4h4.5l3.5 5 3.5-5H20v16h-4.2v-9l-3.8 5.2L8.2 11v9H4V4Z"/></svg>
+            </div>
+            <h4>Mirror</h4><p>Protocol research & auction post-mortems.</p>
+            <span class="comm-stat">24 publications</span>
+          </a>
+        </div>
+
+        <div class="glass newsletter reveal d2">
+          <div class="newsletter-copy">
+            <h3>Get lot drops before the hammer.</h3>
+            <p>Weekly auction calendar, market intelligence and $SCRX token updates. No noise.</p>
+          </div>
+          <form class="newsletter-form" id="newsForm">
+            <input type="email" class="input" placeholder="you@scrapyard.io" required />
+            <button class="btn btn-primary" type="submit">Subscribe <span class="btn-arrow">→</span></button>
+          </form>
+          <div class="newsletter-ok" id="newsOk" hidden>⚡ You're on the list — first alpha drops soon.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#home" class="brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+            <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="url(#lg-brand)" stroke-width="2"/>
+            <path d="M18.5 8 11 18h4.2L13 24l8-10h-4.4z" fill="#22d3ee"/>
+          </svg>
+          <span class="brand-name">SCRAP<span class="brand-x">X</span></span>
+        </a>
+        <p>The Web3 scrap auction protocol.<br/>Transparent bids · Escrowed settlements · Tokenized receipts.</p>
+      </div>
+      <div class="footer-cols">
+        <div><h5>Protocol</h5><a href="#tokenomics">$SCRX Token</a><a href="#roadmap">Roadmap</a><a href="#lots">Lot registry</a></div>
+        <div><h5>Marketplace</h5><a href="#bidders">Bidders</a><a href="#lots">Auctions</a><a href="#community">Community</a></div>
+        <div><h5>Resources</h5><a href="#" onclick="return false">Docs</a><a href="#" onclick="return false">Audit reports</a><a href="#" onclick="return false">Brand kit</a></div>
+      </div>
+    </div>
+    <div class="container footer-base">
+      <span>© 2026 ScrapX Labs. Built for the scrap economy.</span>
+      <span class="mono footer-src">Data · MSTC Combined Bid Sheet 23.08.2026 · Auctions 21977–21980</span>
+    </div>
+  </footer>
+
+  <!-- lot detail modal -->
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="glass modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+/* Real auction data extracted from Combined_Bid_Sheet 23.08.2026.xlsx (MSTC Limited) */
+const DATA = {
+  "meta": {
+    "source": "MSTC Limited \u2014 Combined Bid Sheet (Auctions 21977\u201321980)",
+    "generated": "23.08.2026",
+    "totalMatValue": 15130598,
+    "totalReceivables": 17713348,
+    "totalSd": 3782654,
+    "totalFpReceived": 12998298,
+    "totalFpExpected": 13930698,
+    "lotCount": 37,
+    "bidderCount": 13,
+    "auctions": [
+      21977,
+      21978,
+      21979,
+      21980
+    ]
+  },
+  "lots": [
+    {
+      "lot": 1763,
+      "auction": 21980,
+      "name": "SCRAP COPPER OF T/F WINDING (Oil impregnated paper insulated T/F winding)",
+      "qty": 669.0,
+      "unit": "KG",
+      "rate": 1181.0,
+      "buyer": "AL HAMD TRADE CORPORATION",
+      "matValue": 790089,
+      "gst": 142216,
+      "receivables": 913738,
+      "sdExpected": 197522,
+      "sdReceived": 197522,
+      "fpExpected": 716215,
+      "fpReceived": 716216,
+      "invoice": "DR2640100029",
+      "status": "settled"
+    },
+    {
+      "lot": 1874,
+      "auction": 21977,
+      "name": "Scrap of Empty oil drum",
+      "qty": 270.0,
+      "unit": "NO",
+      "rate": 580.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 156600,
+      "gst": 28188,
+      "receivables": 184240,
+      "sdExpected": 39150,
+      "sdReceived": 39150,
+      "fpExpected": 145090,
+      "fpReceived": 145090,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 1875,
+      "auction": 21977,
+      "name": "Scrap of Copper of faulty AC compressor",
+      "qty": 28.0,
+      "unit": "KG",
+      "rate": 1456.0,
+      "buyer": "F R KHANS ENTERPRISES",
+      "matValue": 40768,
+      "gst": 7338,
+      "receivables": 47149,
+      "sdExpected": 10192,
+      "sdReceived": 10192,
+      "fpExpected": 36957,
+      "fpReceived": 37772,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 1876,
+      "auction": 21977,
+      "name": "Scrap of MS (extracted from equip cage and empty Sf6 gas cylinder)",
+      "qty": 3000.0,
+      "unit": "KG",
+      "rate": 66.0,
+      "buyer": "F R KHANS ENTERPRISES",
+      "matValue": 198000,
+      "gst": 35640,
+      "receivables": 228987,
+      "sdExpected": 49500,
+      "sdReceived": 49500,
+      "fpExpected": 179487,
+      "fpReceived": 183446,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 1923,
+      "auction": 21980,
+      "name": "SCRAP ACSR CONDUCTORS (Conductor Pieces)",
+      "qty": 7253.0,
+      "unit": "KG",
+      "rate": 227.0,
+      "buyer": "OMKAR STEELS",
+      "matValue": 1646431,
+      "gst": 296358,
+      "receivables": 1904097,
+      "sdExpected": 411608,
+      "sdReceived": 411608,
+      "fpExpected": 1492489,
+      "fpReceived": 1492490,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 1976,
+      "auction": 21977,
+      "name": "Scrap Power Transformer",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 2787314.0,
+      "buyer": "SHAR JAHAN TRADERS",
+      "matValue": 2787314,
+      "gst": 501717,
+      "receivables": 3279275,
+      "sdExpected": 696829,
+      "sdReceived": 696829,
+      "fpExpected": 2582446,
+      "fpReceived": 2582447,
+      "invoice": "DR2640100023",
+      "status": "settled"
+    },
+    {
+      "lot": 2002,
+      "auction": 21977,
+      "name": "Scrap of 132 KV CT",
+      "qty": 4.0,
+      "unit": "NO",
+      "rate": 51511.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 206044,
+      "gst": 37088,
+      "receivables": 242411,
+      "sdExpected": 51511,
+      "sdReceived": 51511,
+      "fpExpected": 190900,
+      "fpReceived": 190900,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2003,
+      "auction": 21977,
+      "name": "Scrap of 145 KV CB",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 65007.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 65007,
+      "gst": 11701,
+      "receivables": 76481,
+      "sdExpected": 16252,
+      "sdReceived": 16252,
+      "fpExpected": 60229,
+      "fpReceived": 60229,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2005,
+      "auction": 21977,
+      "name": "Scrap of 220KV CT",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 70006.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 70006,
+      "gst": 12601,
+      "receivables": 82362,
+      "sdExpected": 17502,
+      "sdReceived": 17502,
+      "fpExpected": 64861,
+      "fpReceived": 64859,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2006,
+      "auction": 21977,
+      "name": "Scrap of empty oil drums",
+      "qty": 25.0,
+      "unit": "NO",
+      "rate": 700.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 17500,
+      "gst": 3150,
+      "receivables": 20589,
+      "sdExpected": 4375,
+      "sdReceived": 4375,
+      "fpExpected": 16214,
+      "fpReceived": 16214,
+      "invoice": "DR2640100018",
+      "status": "settled"
+    },
+    {
+      "lot": 2007,
+      "auction": 21977,
+      "name": "SCRAP POWER TRANSFORMER",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 3857116.0,
+      "buyer": "SHAR JAHAN TRADERS",
+      "matValue": 3857116,
+      "gst": 694281,
+      "receivables": 4537897,
+      "sdExpected": 964279,
+      "sdReceived": 964279,
+      "fpExpected": 3573618,
+      "fpReceived": 3573619,
+      "invoice": "DR2640100024",
+      "status": "settled"
+    },
+    {
+      "lot": 2008,
+      "auction": 21977,
+      "name": "Scrap of empty oil Druam",
+      "qty": 250.0,
+      "unit": "NO",
+      "rate": 543.0,
+      "buyer": "HIND TRADERS",
+      "matValue": 135750,
+      "gst": 24435,
+      "receivables": 159710,
+      "sdExpected": 33938,
+      "sdReceived": 33938,
+      "fpExpected": 125772,
+      "fpReceived": 125772,
+      "invoice": "DR2640100026",
+      "status": "settled"
+    },
+    {
+      "lot": 2011,
+      "auction": 21977,
+      "name": "Scrap of empty oil Barrel",
+      "qty": 22.0,
+      "unit": "NO",
+      "rate": 700.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 15400,
+      "gst": 2772,
+      "receivables": 18118,
+      "sdExpected": 3850,
+      "sdReceived": 3850,
+      "fpExpected": 14268,
+      "fpReceived": 14267,
+      "invoice": "DR2640100019",
+      "status": "settled"
+    },
+    {
+      "lot": 2015,
+      "auction": 21978,
+      "name": "Scrap of empty oil Barrels",
+      "qty": 100.0,
+      "unit": "NO",
+      "rate": 710.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 71000,
+      "gst": 12780,
+      "receivables": 83532,
+      "sdExpected": 17750,
+      "sdReceived": 17750,
+      "fpExpected": 65782,
+      "fpReceived": 65782,
+      "invoice": "DR2640100020",
+      "status": "settled"
+    },
+    {
+      "lot": 2018,
+      "auction": 21978,
+      "name": "Scrap of 220 KV Circuit Breaker",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 220001.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 220001,
+      "gst": 39600,
+      "receivables": 258831,
+      "sdExpected": 55000,
+      "sdReceived": 55000,
+      "fpExpected": 203831,
+      "fpReceived": 203831,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2019,
+      "auction": 21978,
+      "name": "Scrap of 220 KV Circuit Breaker",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 210001.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 210001,
+      "gst": 37800,
+      "receivables": 247066,
+      "sdExpected": 52500,
+      "sdReceived": 52500,
+      "fpExpected": 194566,
+      "fpReceived": 194566,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2020,
+      "auction": 21978,
+      "name": "SCRAP 80MM\u00b2 AAAC EARTHWIRE",
+      "qty": 3500.0,
+      "unit": "KG",
+      "rate": 333.0,
+      "buyer": "OMKAR STEELS",
+      "matValue": 1165500,
+      "gst": 209790,
+      "receivables": 1347901,
+      "sdExpected": 291375,
+      "sdReceived": 291375,
+      "fpExpected": 1056526,
+      "fpReceived": 1056525,
+      "invoice": "DR2640100017",
+      "status": "settled"
+    },
+    {
+      "lot": 2022,
+      "auction": 21978,
+      "name": "Scrap of 132 KV CT",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 110200.0,
+      "buyer": "NATIONAL SCRAP AND BUILDING MATERIAL SUPPLIER",
+      "matValue": 330600,
+      "gst": 59508,
+      "receivables": 388951,
+      "sdExpected": 82650,
+      "sdReceived": 82650,
+      "fpExpected": 306301,
+      "fpReceived": 306301,
+      "invoice": "DR2640100028",
+      "status": "settled"
+    },
+    {
+      "lot": 2023,
+      "auction": 21978,
+      "name": "Scrap of 132 KV CT",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 83743.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 251229,
+      "gst": 45221,
+      "receivables": 295571,
+      "sdExpected": 62807,
+      "sdReceived": 62807,
+      "fpExpected": 232764,
+      "fpReceived": 232764,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2025,
+      "auction": 21978,
+      "name": "Scrap of empty oil Barrels",
+      "qty": 90.0,
+      "unit": "NO",
+      "rate": 700.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 63000,
+      "gst": 11340,
+      "receivables": 74120,
+      "sdExpected": 15750,
+      "sdReceived": 15750,
+      "fpExpected": 58370,
+      "fpReceived": 58418,
+      "invoice": "DR2640100021",
+      "status": "settled"
+    },
+    {
+      "lot": 2027,
+      "auction": 21978,
+      "name": "Scrap of 132 KV CT",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 50003.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 50003,
+      "gst": 9001,
+      "receivables": 58829,
+      "sdExpected": 12501,
+      "sdReceived": 12501,
+      "fpExpected": 46328,
+      "fpReceived": 46328,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2033,
+      "auction": 21978,
+      "name": "Scrap Empty Oil Drum/ Barrel",
+      "qty": 1000.0,
+      "unit": "NO",
+      "rate": 517.0,
+      "buyer": "WATAN SCRAP TRADERS",
+      "matValue": 517000,
+      "gst": 93060,
+      "receivables": 608251,
+      "sdExpected": 129250,
+      "sdReceived": 129250,
+      "fpExpected": 479001,
+      "fpReceived": 479001,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2035,
+      "auction": 21978,
+      "name": "Scrap of 132 KV Wave Trap",
+      "qty": 2.0,
+      "unit": "NO",
+      "rate": 14001.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 28002,
+      "gst": 5040,
+      "receivables": 32944,
+      "sdExpected": 7001,
+      "sdReceived": 7001,
+      "fpExpected": 25944,
+      "fpReceived": 25943,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2036,
+      "auction": 21978,
+      "name": "Mix Scrap (Tower angles & 0.2 ACSR Condutor pieces)",
+      "qty": 8.2,
+      "unit": "MT",
+      "rate": 67000.0,
+      "buyer": "M I SCRAP TRADERS",
+      "matValue": 549400,
+      "gst": 98892,
+      "receivables": 635381,
+      "sdExpected": 137350,
+      "sdReceived": 137350,
+      "fpExpected": 498031,
+      "fpReceived": 0,
+      "invoice": "",
+      "status": "pending"
+    },
+    {
+      "lot": 2037,
+      "auction": 21978,
+      "name": "Scrap of empty oil Barrels",
+      "qty": 50.0,
+      "unit": "NO",
+      "rate": 531.0,
+      "buyer": "WATAN SCRAP TRADERS",
+      "matValue": 26550,
+      "gst": 4779,
+      "receivables": 31236,
+      "sdExpected": 6638,
+      "sdReceived": 6638,
+      "fpExpected": 24599,
+      "fpReceived": 24598,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2040,
+      "auction": 21978,
+      "name": "Scrap of 33 KV CT",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 90002.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 270006,
+      "gst": 48601,
+      "receivables": 317662,
+      "sdExpected": 67502,
+      "sdReceived": 67502,
+      "fpExpected": 250161,
+      "fpReceived": 0,
+      "invoice": "",
+      "status": "pending"
+    },
+    {
+      "lot": 2043,
+      "auction": 21979,
+      "name": "Scrap of 132 KV CT",
+      "qty": 5.0,
+      "unit": "NO",
+      "rate": 80000.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 400000,
+      "gst": 72000,
+      "receivables": 470600,
+      "sdExpected": 100000,
+      "sdReceived": 100000,
+      "fpExpected": 370600,
+      "fpReceived": 370600,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2046,
+      "auction": 21979,
+      "name": "Scrap of AAAC Earth wire",
+      "qty": 670.0,
+      "unit": "KG",
+      "rate": 309.0,
+      "buyer": "SAHARA ENTERPRISES",
+      "matValue": 207030,
+      "gst": 37265,
+      "receivables": 243571,
+      "sdExpected": 51758,
+      "sdReceived": 51758,
+      "fpExpected": 191813,
+      "fpReceived": 191812,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2055,
+      "auction": 21979,
+      "name": "Scrap of 220 KV CT",
+      "qty": 2.0,
+      "unit": "NO",
+      "rate": 80006.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 160012,
+      "gst": 28802,
+      "receivables": 188254,
+      "sdExpected": 40003,
+      "sdReceived": 40003,
+      "fpExpected": 148251,
+      "fpReceived": 148251,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2059,
+      "auction": 21979,
+      "name": "Scrap of 33 KV GCB",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 29502.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 29502,
+      "gst": 5310,
+      "receivables": 34709,
+      "sdExpected": 7376,
+      "sdReceived": 7376,
+      "fpExpected": 27334,
+      "fpReceived": 27332,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2062,
+      "auction": 21979,
+      "name": "Scrap of Empty oil Barrels",
+      "qty": 30.0,
+      "unit": "NO",
+      "rate": 702.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 21060,
+      "gst": 3791,
+      "receivables": 24777,
+      "sdExpected": 5265,
+      "sdReceived": 5265,
+      "fpExpected": 19512,
+      "fpReceived": 19512,
+      "invoice": "DR2640100022",
+      "status": "settled"
+    },
+    {
+      "lot": 2067,
+      "auction": 21980,
+      "name": "Scrap of empty oil drums",
+      "qty": 150.0,
+      "unit": "NO",
+      "rate": 571.0,
+      "buyer": "WATAN SCRAP TRADERS",
+      "matValue": 85650,
+      "gst": 15417,
+      "receivables": 100767,
+      "sdExpected": 21413,
+      "sdReceived": 21413,
+      "fpExpected": 79355,
+      "fpReceived": 79354,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2069,
+      "auction": 21980,
+      "name": "Scrap of 33 KV CB",
+      "qty": 1.0,
+      "unit": "NO",
+      "rate": 54000.0,
+      "buyer": "STERLING ENTERPRISES",
+      "matValue": 54000,
+      "gst": 9720,
+      "receivables": 63531,
+      "sdExpected": 13500,
+      "sdReceived": 13500,
+      "fpExpected": 50031,
+      "fpReceived": 0,
+      "invoice": "",
+      "status": "pending"
+    },
+    {
+      "lot": 2071,
+      "auction": 21980,
+      "name": "Scrap of 66 KV Isolater",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 25001.0,
+      "buyer": "NATIONAL ENTERPRISES",
+      "matValue": 75003,
+      "gst": 13501,
+      "receivables": 88241,
+      "sdExpected": 18751,
+      "sdReceived": 18751,
+      "fpExpected": 69490,
+      "fpReceived": 69491,
+      "invoice": "",
+      "status": "settled"
+    },
+    {
+      "lot": 2086,
+      "auction": 21980,
+      "name": "Scrap of 132 KV CT",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 70001.0,
+      "buyer": "KASHYAP TRADING CO",
+      "matValue": 210003,
+      "gst": 37801,
+      "receivables": 247069,
+      "sdExpected": 52501,
+      "sdReceived": 52501,
+      "fpExpected": 194568,
+      "fpReceived": 194568,
+      "invoice": "DR2640100025",
+      "status": "settled"
+    },
+    {
+      "lot": 2089,
+      "auction": 21980,
+      "name": "Scrap of 66 kv TBC C & R Panel",
+      "qty": 2.0,
+      "unit": "NO",
+      "rate": 15006.0,
+      "buyer": "S M ENTERPRISES",
+      "matValue": 30012,
+      "gst": 5402,
+      "receivables": 35309,
+      "sdExpected": 7503,
+      "sdReceived": 7503,
+      "fpExpected": 27806,
+      "fpReceived": 0,
+      "invoice": "",
+      "status": "pending"
+    },
+    {
+      "lot": 2091,
+      "auction": 21980,
+      "name": "Scrap of 132 KV CT",
+      "qty": 3.0,
+      "unit": "NO",
+      "rate": 40003.0,
+      "buyer": "S M ENTERPRISES",
+      "matValue": 120009,
+      "gst": 21602,
+      "receivables": 141191,
+      "sdExpected": 30002,
+      "sdReceived": 30002,
+      "fpExpected": 111188,
+      "fpReceived": 0,
+      "invoice": "",
+      "status": "pending"
+    }
+  ],
+  "bidders": [
+    {
+      "name": "SHAR JAHAN TRADERS",
+      "lots": 2,
+      "matValue": 6644430,
+      "receivables": 7817172,
+      "sdExpected": 1661108,
+      "sdReceived": 1661108,
+      "fpExpected": 6156064,
+      "fpReceived": 6156066,
+      "status": "settled"
+    },
+    {
+      "name": "OMKAR STEELS",
+      "lots": 2,
+      "matValue": 2811931,
+      "receivables": 3251998,
+      "sdExpected": 702983,
+      "sdReceived": 702983,
+      "fpExpected": 2549015,
+      "fpReceived": 2549015,
+      "status": "settled"
+    },
+    {
+      "name": "NATIONAL ENTERPRISES",
+      "lots": 13,
+      "matValue": 1921410,
+      "receivables": 2260539,
+      "sdExpected": 480354,
+      "sdReceived": 480354,
+      "fpExpected": 1780188,
+      "fpReceived": 1780184,
+      "status": "settled"
+    },
+    {
+      "name": "AL HAMD TRADE CORPORATION",
+      "lots": 1,
+      "matValue": 790089,
+      "receivables": 913738,
+      "sdExpected": 197522,
+      "sdReceived": 197522,
+      "fpExpected": 716215,
+      "fpReceived": 716216,
+      "status": "settled"
+    },
+    {
+      "name": "WATAN SCRAP TRADERS",
+      "lots": 3,
+      "matValue": 629200,
+      "receivables": 740254,
+      "sdExpected": 157301,
+      "sdReceived": 157301,
+      "fpExpected": 582955,
+      "fpReceived": 582953,
+      "status": "settled"
+    },
+    {
+      "name": "M I SCRAP TRADERS",
+      "lots": 1,
+      "matValue": 549400,
+      "receivables": 635381,
+      "sdExpected": 137350,
+      "sdReceived": 137350,
+      "fpExpected": 498031,
+      "fpReceived": 0,
+      "status": "pending"
+    },
+    {
+      "name": "STERLING ENTERPRISES",
+      "lots": 7,
+      "matValue": 511966,
+      "receivables": 602329,
+      "sdExpected": 127992,
+      "sdReceived": 127992,
+      "fpExpected": 474338,
+      "fpReceived": 174193,
+      "status": "partial"
+    },
+    {
+      "name": "NATIONAL SCRAP AND BUILDING MATERIAL SUPPLIER",
+      "lots": 1,
+      "matValue": 330600,
+      "receivables": 388951,
+      "sdExpected": 82650,
+      "sdReceived": 82650,
+      "fpExpected": 306301,
+      "fpReceived": 306301,
+      "status": "settled"
+    },
+    {
+      "name": "F R KHANS ENTERPRISES",
+      "lots": 2,
+      "matValue": 238768,
+      "receivables": 276136,
+      "sdExpected": 59692,
+      "sdReceived": 59692,
+      "fpExpected": 216444,
+      "fpReceived": 221218,
+      "status": "settled"
+    },
+    {
+      "name": "KASHYAP TRADING CO",
+      "lots": 1,
+      "matValue": 210003,
+      "receivables": 247069,
+      "sdExpected": 52501,
+      "sdReceived": 52501,
+      "fpExpected": 194568,
+      "fpReceived": 194568,
+      "status": "settled"
+    },
+    {
+      "name": "SAHARA ENTERPRISES",
+      "lots": 1,
+      "matValue": 207030,
+      "receivables": 243571,
+      "sdExpected": 51758,
+      "sdReceived": 51758,
+      "fpExpected": 191813,
+      "fpReceived": 191812,
+      "status": "settled"
+    },
+    {
+      "name": "S M ENTERPRISES",
+      "lots": 2,
+      "matValue": 150021,
+      "receivables": 176500,
+      "sdExpected": 37505,
+      "sdReceived": 37505,
+      "fpExpected": 138994,
+      "fpReceived": 0,
+      "status": "pending"
+    },
+    {
+      "name": "HIND TRADERS",
+      "lots": 1,
+      "matValue": 135750,
+      "receivables": 159710,
+      "sdExpected": 33938,
+      "sdReceived": 33938,
+      "fpExpected": 125772,
+      "fpReceived": 125772,
+      "status": "settled"
+    }
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SCRAPX — interactions, rendering from real bid-sheet data
+   ═══════════════════════════════════════════════════════════ */
+(() => {
+  "use strict";
+
+  /* ── helpers ─────────────────────────────────────────── */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const inr = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 });
+
+  const fmtINR = (n) => "₹" + inr.format(Math.round(n));
+  const fmtCompact = (n) => {
+    if (n >= 1e7) return "₹" + (n / 1e7).toFixed(2) + " Cr";
+    if (n >= 1e5) return "₹" + (n / 1e5).toFixed(2) + " L";
+    return fmtINR(n);
+  };
+  const fmtQty = (q) => (Number.isInteger(q) ? inr.format(q) : q.toFixed(2));
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const STATUS_LABEL = { settled: "Settled", partial: "Partial", pending: "Pending" };
+
+  const { meta, lots, bidders } = DATA;
+
+  /* ── nav ─────────────────────────────────────────────── */
+  const nav = $("#nav");
+  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  const burger = $("#navBurger"), navLinks = $("#navLinks");
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("open");
+    navLinks.classList.toggle("open");
+  });
+  navLinks.addEventListener("click", (e) => {
+    if (e.target.tagName === "A") { burger.classList.remove("open"); navLinks.classList.remove("open"); }
+  });
+
+  /* ── reveal on scroll ────────────────────────────────── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  $$(".reveal").forEach((el) => io.observe(el));
+
+  /* ── count-up stats ──────────────────────────────────── */
+  const fmtCount = (el, v) => {
+    const p = el.dataset.prefix || "", s = el.dataset.suffix || "";
+    const d = +(el.dataset.decimals || 0);
+    el.textContent = p + v.toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + s;
+  };
+  const cio = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const el = en.target, target = parseFloat(el.dataset.count), t0 = performance.now(), dur = 1400;
+      const tick = (t) => {
+        const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        fmtCount(el, target * e);
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+  $$("[data-count]").forEach((el) => cio.observe(el));
+
+  /* ── ticker (real hammer results) ────────────────────── */
+  const tickerLots = lots
+    .slice()
+    .sort((a, b) => b.matValue - a.matValue)
+    .slice(0, 14)
+    .map((l) =>
+      `<span class="ticker-item"><b>LOT ${l.lot}</b> ${esc(l.name.slice(0, 34))}${l.name.length > 34 ? "…" : ""}` +
+      ` · <em>${fmtCompact(l.matValue)}</em> <span class="up">▲ ${l.status === "settled" ? "SETTLED" : l.status.toUpperCase()}</span></span>`
+    ).join("");
+  $("#tickerTrack").innerHTML = tickerLots + tickerLots; // duplicate for seamless loop
+
+  /* ── tokenomics donut ────────────────────────────────── */
+  const ALLOC = [
+    { name: "Auction liquidity & escrow", pct: 30, color: "#a855f7" },
+    { name: "Bidder rewards & cashback", pct: 25, color: "#7c3aed" },
+    { name: "Team & advisors · 24m vest", pct: 15, color: "#6366f1" },
+    { name: "Ecosystem & grants", pct: 15, color: "#3b82f6" },
+    { name: "Public sale", pct: 10, color: "#22d3ee" },
+    { name: "Treasury reserve", pct: 5, color: "#34d399" },
+  ];
+  const donut = $("#donut"), R = 78, C = 2 * Math.PI * R;
+  let offset = 0;
+  ALLOC.forEach((a) => {
+    const seg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    seg.setAttribute("class", "seg");
+    seg.setAttribute("cx", 100); seg.setAttribute("cy", 100); seg.setAttribute("r", R);
+    seg.setAttribute("stroke", a.color);
+    const len = (a.pct / 100) * C;
+    seg.setAttribute("stroke-dasharray", `${len - 2.5} ${C - len + 2.5}`);
+    seg.setAttribute("stroke-dashoffset", -offset);
+    seg.setAttribute("stroke-linecap", "round");
+    const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
+    t.textContent = `${a.name} — ${a.pct}%`;
+    seg.appendChild(t);
+    donut.appendChild(seg);
+    offset += len;
+  });
+  $("#legend").innerHTML = ALLOC
+    .map((a) => `<li><span class="sw" style="--sc:${a.color};background:${a.color}"></span>${esc(a.name)}<span class="pct">${a.pct}%</span></li>`)
+    .join("");
+
+  /* ── bidder summary chips ────────────────────────────── */
+  const settledCount = bidders.filter((b) => b.status === "settled").length;
+  const topBidder = bidders[0];
+  $("#bidderSummary").innerHTML = `
+    <div class="glass ledger-chip"><div class="lc-k">Registered bidders</div><div class="lc-v">${bidders.length}</div><div class="lc-s">KYC + wallet verified</div></div>
+    <div class="glass ledger-chip"><div class="lc-k">Fully settled</div><div class="lc-v">${settledCount}/${bidders.length}</div><div class="lc-s">final payments cleared</div></div>
+    <div class="glass ledger-chip"><div class="lc-k">Payments received</div><div class="lc-v">${fmtCompact(meta.totalFpReceived)}</div><div class="lc-s">of ${fmtCompact(meta.totalFpExpected)} expected</div></div>
+    <div class="glass ledger-chip"><div class="lc-k">Top hammer</div><div class="lc-v" style="font-size:19px;line-height:1.35">${esc(topBidder.name)}</div><div class="lc-s">${fmtCompact(topBidder.matValue)} across ${topBidder.lots} lots</div></div>`;
+
+  /* ── bidder table ────────────────────────────────────── */
+  const bidderRows = $("#bidderRows");
+  const renderBidders = (filter = "") => {
+    const f = filter.trim().toLowerCase();
+    const rows = bidders
+      .filter((b) => !f || b.name.toLowerCase().includes(f))
+      .map((b, i) => `
+        <tr data-bidder="${esc(b.name)}">
+          <td class="num">${String(i + 1).padStart(2, "0")}</td>
+          <td class="strong">${esc(b.name)}</td>
+          <td class="num">${b.lots}</td>
+          <td class="num">${fmtINR(b.matValue)}</td>
+          <td class="num">${fmtINR(b.receivables)}</td>
+          <td class="num">${fmtINR(b.sdReceived)}</td>
+          <td class="num">${fmtINR(b.fpReceived)} <span style="color:var(--ink-faint)">/ ${fmtCompact(b.fpExpected)}</span></td>
+          <td><span class="badge ${b.status}">${STATUS_LABEL[b.status]}</span></td>
+          <td><span class="row-link">view lots →</span></td>
+        </tr>`).join("");
+    bidderRows.innerHTML = rows || `<tr><td colspan="9" style="text-align:center;padding:34px;color:var(--ink-faint)">No bidders match “${esc(filter)}”.</td></tr>`;
+  };
+  renderBidders();
+  $("#bidderSearch").addEventListener("input", (e) => renderBidders(e.target.value));
+
+  bidderRows.addEventListener("click", (e) => {
+    const tr = e.target.closest("tr[data-bidder]");
+    if (!tr) return;
+    setBidderFilter(tr.dataset.bidder);
+    $("#lots").scrollIntoView({ behavior: "smooth" });
+  });
+
+  /* ── lot table + filters ─────────────────────────────── */
+  const lotRows = $("#lotRows"), lotFoot = $("#lotFoot");
+  const state = { auction: "all", status: "all", q: "", bidder: null };
+
+  const auctionChips = $("#auctionChips");
+  auctionChips.innerHTML =
+    `<button class="f-chip active" data-a="all">All auctions</button>` +
+    meta.auctions.map((a) => `<button class="f-chip" data-a="${a}">Series ${a}</button>`).join("");
+  auctionChips.addEventListener("click", (e) => {
+    const btn = e.target.closest(".f-chip");
+    if (!btn) return;
+    $$(".f-chip", auctionChips).forEach((c) => c.classList.remove("active"));
+    btn.classList.add("active");
+    state.auction = btn.dataset.a;
+    renderLots();
+  });
+
+  $("#statusFilter").addEventListener("change", (e) => { state.status = e.target.value; renderLots(); });
+  $("#lotSearch").addEventListener("input", (e) => { state.q = e.target.value.trim().toLowerCase(); renderLots(); });
+
+  const bidderTag = $("#bidderFilterTag");
+  function setBidderFilter(name) {
+    state.bidder = name;
+    bidderTag.hidden = !name;
+    if (name) bidderTag.querySelector("span").textContent = "Bidder: " + name;
+    renderLots();
+  }
+  $("#clearBidderFilter").addEventListener("click", () => setBidderFilter(null));
+
+  const filteredLots = () =>
+    lots.filter((l) =>
+      (state.auction === "all" || String(l.auction) === state.auction) &&
+      (state.status === "all" || l.status === state.status) &&
+      (!state.bidder || l.buyer === state.bidder) &&
+      (!state.q ||
+        l.name.toLowerCase().includes(state.q) ||
+        l.buyer.toLowerCase().includes(state.q) ||
+        String(l.lot).includes(state.q))
+    );
+
+  function renderLots() {
+    const list = filteredLots();
+    lotRows.innerHTML = list.map((l) => `
+      <tr data-lot="${l.lot}">
+        <td class="num strong">#${l.lot}</td>
+        <td class="num">${l.auction}</td>
+        <td class="lot-name">${esc(l.name)}</td>
+        <td>${esc(l.buyer)}</td>
+        <td class="num">${fmtQty(l.qty)} ${l.unit}</td>
+        <td class="num">${fmtINR(l.rate)}</td>
+        <td class="num strong">${fmtINR(l.matValue)}</td>
+        <td><span class="badge ${l.status}">${STATUS_LABEL[l.status]}</span></td>
+        <td><span class="row-link">detail →</span></td>
+      </tr>`).join("") ||
+      `<tr><td colspan="9" style="text-align:center;padding:34px;color:var(--ink-faint)">No lots match the current filters.</td></tr>`;
+    const mv = list.reduce((s, l) => s + l.matValue, 0);
+    lotFoot.innerHTML = `<span>${list.length} lot${list.length === 1 ? "" : "s"} · material value ${fmtCompact(mv)}</span><span>Source · Combined Bid Sheet 23.08.2026</span>`;
+  }
+  renderLots();
+
+  /* ── lot modal ───────────────────────────────────────── */
+  const backdrop = $("#modalBackdrop"), modalBody = $("#modalBody");
+  lotRows.addEventListener("click", (e) => {
+    const tr = e.target.closest("tr[data-lot]");
+    if (!tr) return;
+    openLot(+tr.dataset.lot);
+  });
+  function openLot(lotNo) {
+    const l = lots.find((x) => x.lot === lotNo);
+    if (!l) return;
+    const pct = l.fpExpected ? Math.min(100, Math.round((l.fpReceived / l.fpExpected) * 100)) : 0;
+    modalBody.innerHTML = `
+      <div class="modal-eyebrow">Lot #${l.lot} · Auction ${l.auction} · ${l.invoice ? "Invoice " + esc(l.invoice) : "Invoice pending"}</div>
+      <h3>${esc(l.name)}</h3>
+      <div class="modal-buyer">Won by <b>${esc(l.buyer)}</b> · <span class="badge ${l.status}">${STATUS_LABEL[l.status]}</span></div>
+      <div class="modal-price"><span class="big">${fmtINR(l.matValue)}</span><span class="small">material value @ ${fmtINR(l.rate)}/${l.unit}</span></div>
+      <div class="modal-grid">
+        <div class="modal-cell"><span>Quantity</span><b>${fmtQty(l.qty)} ${l.unit}</b></div>
+        <div class="modal-cell"><span>Hammer rate</span><b>${fmtINR(l.rate)} / ${l.unit}</b></div>
+        <div class="modal-cell"><span>GST (18%)</span><b>${fmtINR(l.gst)}</b></div>
+        <div class="modal-cell"><span>Total receivables</span><b>${fmtINR(l.receivables)}</b></div>
+        <div class="modal-cell"><span>Security deposit</span><b>${fmtINR(l.sdReceived)} <span style="color:var(--ink-faint)">/ ${fmtCompact(l.sdExpected)}</span></b></div>
+        <div class="modal-cell"><span>Final payment</span><b>${fmtINR(l.fpReceived)} <span style="color:var(--ink-faint)">/ ${fmtCompact(l.fpExpected)}</span></b></div>
+      </div>
+      <div class="modal-progress-label"><span>On-chain settlement progress</span><b>${pct}%</b></div>
+      <div class="live-bar"><div class="live-bar-fill" style="--w:${pct}%"></div></div>`;
+    backdrop.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  const closeModal = () => { backdrop.hidden = true; document.body.style.overflow = ""; };
+  $("#modalClose").addEventListener("click", closeModal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !backdrop.hidden) closeModal(); });
+
+  /* ── team ────────────────────────────────────────────── */
+  const TEAM = [
+    { n: "Arjun Mehta", r: "Founder & CEO", b: "Ex-auction-house strategist. Cleared ₹40Cr+ of industrial disposals before going on-chain.", i: "AM", c: ["#a855f7", "#6366f1"] },
+    { n: "Priya Sharma", r: "CTO · Protocol", b: "Smart-contract engineer. Previously built escrow infra settling $120M/yr in trade finance.", i: "PS", c: ["#6366f1", "#22d3ee"] },
+    { n: "Kabir Anand", r: "Head of Auctions", b: "12 years running heavy-machinery e-auctions. Knows every transformer lot by smell.", i: "KA", c: ["#7c3aed", "#38bdf8"] },
+    { n: "Neha Verma", r: "Compliance & Risk", b: "GST, TDS and scrap-regulation specialist keeping every settlement audit-clean.", i: "NV", c: ["#3b82f6", "#22d3ee"] },
+    { n: "Dev Malhotra", r: "Lead Product Designer", b: "Turns settlement ledgers into interfaces people actually enjoy staring at.", i: "DM", c: ["#a855f7", "#3b82f6"] },
+    { n: "Sara Fernandes", r: "Community & DAO", b: "Grew three protocol communities past 50k combined. Runs the auction war-rooms.", i: "SF", c: ["#22d3ee", "#818cf8"] },
+  ];
+  const iconX = '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.2l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2Zm-1.1 18h1.7L7.1 3.8H5.3L17.8 20Z"/></svg>';
+  const iconIn = '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.24 8.31h4.52V23H.24V8.31Zm7.44 0h4.33v2h.06c.6-1.14 2.08-2.34 4.28-2.34 4.58 0 5.42 3.01 5.42 6.93V23h-4.5v-7.1c0-1.7-.03-3.88-2.36-3.88-2.37 0-2.73 1.85-2.73 3.76V23H7.68V8.31Z"/></svg>';
+  $("#teamGrid").innerHTML = TEAM.map((t, i) => `
+    <div class="glass team-card reveal ${i ? "d" + Math.min(i, 4) : ""}" style="--a1:${t.c[0]};--a2:${t.c[1]};--tc:${t.c[0]}">
+      <div class="avatar">${t.i}</div>
+      <h4>${t.n}</h4>
+      <div class="team-role">${t.r}</div>
+      <p class="team-bio">${t.b}</p>
+      <div class="team-socials">
+        <a href="#" onclick="return false" aria-label="${t.n} on X">${iconX}</a>
+        <a href="#" onclick="return false" aria-label="${t.n} on LinkedIn">${iconIn}</a>
+      </div>
+    </div>`).join("");
+  $$("#teamGrid .reveal").forEach((el) => io.observe(el));
+
+  /* ── newsletter ──────────────────────────────────────── */
+  $("#newsForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.target.hidden = true;
+    $("#newsOk").hidden = false;
+  });
+})();
+
+</script>
+</body>
+</html>
