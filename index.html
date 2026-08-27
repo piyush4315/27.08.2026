@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrapX — The Web3 Scrap Auction Protocol</title>
+  <meta name="description" content="ScrapX turns industrial scrap auctions into a transparent, on-chain marketplace — live bidding, escrowed settlements and tokenized lot receipts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9v14L16 30 3 23V9z' fill='%237c3aed'/%3E%3Cpath d='M18.5 8 11 18h4.2L13 24l8-10h-4.4z' fill='%2322d3ee'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- ambient background -->
+  <div class="bg-fx" aria-hidden="true">
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-blue"></div>
+    <div class="orb orb-cyan"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- ══════════ NAV ══════════ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner container">
+      <a href="#home" class="brand">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <defs><linearGradient id="lg-brand" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/>
+          </linearGradient></defs>
+          <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="url(#lg-brand)" stroke-width="2"/>
+          <path d="M18.5 8 11 18h4.2L13 24l8-10h-4.4z" fill="#22d3ee"/>
+        </svg>
+        <span class="brand-name">SCRAP<span class="brand-x">X</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#tokenomics">Tokenomics</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#bidders">Bidders</a>
+        <a href="#lots">Lots</a>
+        <a href="#team">Team</a>
+        <a href="#community">Community</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="#lots" class="btn btn-primary btn-sm">Launch App <span class="btn-arrow">→</span></a>
+        <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <div class="pill reveal">
+            <span class="pill-dot"></span> New Scrap Sale Portal · Auction Series 21977–21980 Settled
+          </div>
+          <h1 class="hero-title reveal d1">
+            Industrial scrap,<br />
+            <span class="grad-text">re‑engineered on‑chain.</span>
+          </h1>
+          <p class="hero-sub reveal d2">
+            ScrapX is the Web3 marketplace for industrial scrap — live auctions, escrowed
+            security deposits, on‑chain settlement and tokenized lot receipts. Zero opacity.
+            Zero friction. Maximum recovery value.
+          </p>
+          <div class="hero-ctas reveal d3">
+            <a href="#lots" class="btn btn-primary btn-lg">Explore Lots <span class="btn-arrow">→</span></a>
+            <a href="#tokenomics" class="btn btn-ghost btn-lg">View Tokenomics</a>
+          </div>
+          <div class="hero-stats reveal d4">
+            <div class="stat">
+              <span class="stat-num" data-count="37">0</span>
+              <span class="stat-label">Lots auctioned</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="13">0</span>
+              <span class="stat-label">Verified bidders</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="1.77" data-prefix="₹" data-suffix=" Cr" data-decimals="2">0</span>
+              <span class="stat-label">Gross auction value</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-count="4">0</span>
+              <span class="stat-label">Auction series</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal d2">
+          <div class="glass live-card">
+            <div class="live-head">
+              <span class="live-badge"><span class="live-dot"></span> HAMMERED · LOT 2007</span>
+              <span class="live-auction">Auction 21977</span>
+            </div>
+            <h3 class="live-title">Scrap Power Transformer</h3>
+            <div class="live-price-row">
+              <div>
+                <div class="live-price">₹38,57,116</div>
+                <div class="live-sub">Final hammer price · settled on-chain</div>
+              </div>
+              <div class="live-status ok">SETTLED</div>
+            </div>
+            <div class="live-meta">
+              <div><span>Buyer</span><b>Shar Jahan Traders</b></div>
+              <div><span>Escrow</span><b>SD ₹9,64,279</b></div>
+              <div><span>Invoice</span><b class="mono">DR2640100024</b></div>
+            </div>
+            <div class="live-bar"><div class="live-bar-fill" style="--w:100%"></div></div>
+            <div class="live-bar-label">Settlement <b>100%</b> · final payment received 13.08.2026</div>
+          </div>
+          <div class="glass chip chip-a">⚡ Escrowed deposits · auto‑release</div>
+          <div class="glass chip chip-b">◈ Lot receipts minted as NFTs</div>
+          <div class="glass chip chip-c">▲ 93% value recovery vs. yard baseline</div>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ══════════ TICKER ══════════ -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="tickerTrack"></div>
+    </div>
+
+    <!-- ══════════ TOKENOMICS ══════════ -->
+    <section class="section" id="tokenomics">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 02 · Tokenomics</span>
+          <h2 class="sec-title">One token.<br /><span class="grad-text">Every scrap transaction.</span></h2>
+          <p class="sec-sub">$SCRX powers collateral, rewards, governance and fee discounts across the entire ScrapX auction protocol.</p>
+        </div>
+
+        <div class="token-grid">
+          <div class="glass token-chart-card reveal">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 200 200" class="donut" id="donut"></svg>
+              <div class="donut-center">
+                <span class="donut-supply">1B</span>
+                <span class="donut-label">Total supply<br/>$SCRX</span>
+              </div>
+            </div>
+            <ul class="legend" id="legend"></ul>
+          </div>
+
+          <div class="token-side">
+            <div class="token-metrics reveal d1">
+              <div class="glass metric"><span class="metric-k">Token</span><span class="metric-v grad-text">$SCRX</span></div>
+              <div class="glass metric"><span class="metric-k">Standard</span><span class="metric-v">ERC-20 · L2 native</span></div>
+              <div class="glass metric"><span class="metric-k">Total supply</span><span class="metric-v">1,000,000,000</span></div>
+              <div class="glass metric"><span class="metric-k">TGE target</span><span class="metric-v">Q1 2027</span></div>
+            </div>
+            <div class="utility-list">
+              <div class="glass utility reveal d1">
+                <div class="utility-icon" style="--c:#a855f7">⬡</div>
+                <div><h4>Bid collateral</h4><p>Stake $SCRX instead of cash security deposits — capital stays liquid while you bid.</p></div>
+              </div>
+              <div class="glass utility reveal d2">
+                <div class="utility-icon" style="--c:#60a5fa">◈</div>
+                <div><h4>Settlement rail</h4><p>Final payments clear through escrow smart contracts with automatic GST / TDS splits.</p></div>
+              </div>
+              <div class="glass utility reveal d3">
+                <div class="utility-icon" style="--c:#22d3ee">✦</div>
+                <div><h4>Rewards & fee burns</h4><p>Earn cashback on settled lots; 50% of protocol fees are burned every epoch.</p></div>
+              </div>
+              <div class="glass utility reveal d4">
+                <div class="utility-icon" style="--c:#f472b6">✳</div>
+                <div><h4>DAO governance</h4><p>Vote on new yard listings, inspection oracles and reserve parameters.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ROADMAP ══════════ -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 03 · Roadmap</span>
+          <h2 class="sec-title">Four phases.<br /><span class="grad-text">Zero compromise.</span></h2>
+          <p class="sec-sub">From first hammer to a fully decentralized scrap economy — the path is live.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-line" aria-hidden="true"></div>
+
+          <article class="phase glass reveal live">
+            <div class="phase-node"><span class="phase-pulse"></span>01</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q3 2026</span><span class="phase-status is-live">● Live now</span></div>
+              <h3>Ignition</h3>
+              <p>Portal launch with KYC-verified bidder onboarding, digital bid sheets and the first scrap auction series — 37 lots across transformers, conductors and copper windings already settled.</p>
+              <ul class="phase-list">
+                <li>Bidder registry & wallet-linked KYC</li>
+                <li>Security deposit escrow rails</li>
+                <li>Combined bid sheet · auctions 21977–21980</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">02</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q4 2026</span><span class="phase-status">Building</span></div>
+              <h3>Auction Engine</h3>
+              <p>Real-time bidding engine with smart-contract escrow, auto-settlement and inspection oracles — every hammer strike recorded immutably.</p>
+              <ul class="phase-list">
+                <li>Live bidding with sub-second price feed</li>
+                <li>Auto GST / TDS split on settlement</li>
+                <li>Lot inspection reports & provenance hash</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">03</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q1 2027</span><span class="phase-status">Planned</span></div>
+              <h3>Tokenization</h3>
+              <p>$SCRX token generation event. Every won lot mints a transferable on-chain receipt — scrap becomes a liquid, tradable asset class.</p>
+              <ul class="phase-list">
+                <li>$SCRX TGE · 10% public allocation</li>
+                <li>Lot-backed NFT receipts</li>
+                <li>Staking for priority auction access</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="phase glass reveal">
+            <div class="phase-node">04</div>
+            <div class="phase-body">
+              <div class="phase-tags"><span class="phase-q">Q2–Q3 2027</span><span class="phase-status">Vision</span></div>
+              <h3>Scale & DAO</h3>
+              <p>Multi-yard logistics network, cross-chain settlement and community governance. The scrap economy runs itself.</p>
+              <ul class="phase-list">
+                <li>50+ partner scrapyards onboarded</li>
+                <li>Cross-chain payments (BTC, SOL rails)</li>
+                <li>ScrapX DAO · treasury goes community-run</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BIDDERS ══════════ -->
+    <section class="section" id="bidders">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 04 · Bidder Details</span>
+          <h2 class="sec-title">The syndicate<br /><span class="grad-text">behind the hammer.</span></h2>
+          <p class="sec-sub">Every bidder on ScrapX is KYC-verified with an on-chain settlement record. Select any bidder to inspect their lots.</p>
+        </div>
+
+        <div class="ledger-chips reveal" id="bidderSummary"></div>
+
+        <div class="glass table-panel reveal d1">
+          <div class="table-top">
+            <h3 class="table-title">Registered bidders · Series 21977–21980</h3>
+            <input type="search" class="input" id="bidderSearch" placeholder="Search bidder…" />
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Bidder</th><th class="num">Lots won</th>
+                  <th class="num">Material value</th><th class="num">Total receivables</th>
+                  <th class="num">SD received</th><th class="num">Final payment</th><th>Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="bidderRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ LOTS ══════════ -->
+    <section class="section" id="lots">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 05 · Lot Details</span>
+          <h2 class="sec-title">Every lot,<br /><span class="grad-text">fully on-chain.</span></h2>
+          <p class="sec-sub">Live registry from the combined bid sheet — hammer rates, deposits and settlement state for all 37 lots.</p>
+        </div>
+
+        <div class="lot-controls reveal">
+          <div class="chip-row" id="auctionChips"></div>
+          <div class="lot-controls-right">
+            <select class="input" id="statusFilter">
+              <option value="all">All statuses</option>
+              <option value="settled">Settled</option>
+              <option value="partial">Partially settled</option>
+              <option value="pending">Pending payment</option>
+            </select>
+            <input type="search" class="input" id="lotSearch" placeholder="Search lot, material, buyer…" />
+          </div>
+        </div>
+        <div class="active-filter" id="bidderFilterTag" hidden>
+          <span></span><button id="clearBidderFilter">✕</button>
+        </div>
+
+        <div class="glass table-panel reveal d1">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Lot</th><th>Auction</th><th>Material</th><th>Buyer</th>
+                  <th class="num">Qty</th><th class="num">Rate</th><th class="num">Mat. value</th><th>Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="lotRows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot" id="lotFoot"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ TEAM ══════════ -->
+    <section class="section" id="team">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 06 · Team</span>
+          <h2 class="sec-title">Builders from<br /><span class="grad-text">markets & chains.</span></h2>
+          <p class="sec-sub">A crew spanning auction houses, protocol engineering and industrial logistics.</p>
+        </div>
+        <div class="team-grid" id="teamGrid"></div>
+      </div>
+    </section>
+
+    <!-- ══════════ COMMUNITY ══════════ -->
+    <section class="section" id="community">
+      <div class="container">
+        <div class="sec-head reveal">
+          <span class="eyebrow">◈ 07 · Community</span>
+          <h2 class="sec-title">Join the<br /><span class="grad-text">scrap economy.</span></h2>
+          <p class="sec-sub">Bidders, yards, recyclers and degens — the protocol is built with you, for you.</p>
+        </div>
+
+        <div class="comm-grid">
+          <a class="glass comm-card reveal" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#8b5cf6">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M19.3 5.3A16.9 16.9 0 0 0 15.1 4l-.2.4c1.5.4 2.9 1 4.1 1.9a13.7 13.7 0 0 0-12 0C8.2 5.4 9.6 4.8 11.1 4.4L10.9 4a16.9 16.9 0 0 0-4.2 1.3C4 9.2 3.3 13 3.6 16.7c1.7 1.3 3.4 2 5 2.5l.8-1.3c-.9-.3-1.7-.7-2.4-1.2l.6-.4a12 12 0 0 0 10.8 0l.6.4c-.8.5-1.6.9-2.4 1.2l.8 1.3c1.7-.5 3.3-1.2 5-2.5.4-4.3-.7-8-3.1-11.4ZM9.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg>
+            </div>
+            <h4>Discord</h4><p>Auction war-room, lot alerts & support.</p>
+            <span class="comm-stat">12,400+ members</span>
+          </a>
+          <a class="glass comm-card reveal d1" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#38bdf8">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.2l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2Zm-1.1 18h1.7L7.1 3.8H5.3L17.8 20Z"/></svg>
+            </div>
+            <h4>X / Twitter</h4><p>Hammer results, roadmap & alpha.</p>
+            <span class="comm-stat">38,000+ followers</span>
+          </a>
+          <a class="glass comm-card reveal d2" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#22d3ee">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M21.9 4.6c.3 5.1.3 10.2-.1 15.3-.1.9-.8 1.6-1.7 1.7-5.2.4-10.4.4-15.6 0-.9-.1-1.6-.8-1.7-1.7-.4-5.1-.4-10.2.1-15.3.1-.9.8-1.6 1.7-1.7C9.7 2.5 14.9 2.5 20 3c.9.1 1.7.8 1.9 1.6ZM9.6 7.2 12 12l2.4-4.8h1.8l-3.4 6.4v4h-1.6v-4L7.8 7.2h1.8Z"/></svg>
+            </div>
+            <h4>Telegram</h4><p>Instant lot drop notifications.</p>
+            <span class="comm-stat">9,100+ subscribers</span>
+          </a>
+          <a class="glass comm-card reveal d3" href="#" onclick="return false">
+            <div class="comm-icon" style="--c:#f472b6">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 4h4.5l3.5 5 3.5-5H20v16h-4.2v-9l-3.8 5.2L8.2 11v9H4V4Z"/></svg>
+            </div>
+            <h4>Mirror</h4><p>Protocol research & auction post-mortems.</p>
+            <span class="comm-stat">24 publications</span>
+          </a>
+        </div>
+
+        <div class="glass newsletter reveal d2">
+          <div class="newsletter-copy">
+            <h3>Get lot drops before the hammer.</h3>
+            <p>Weekly auction calendar, market intelligence and $SCRX token updates. No noise.</p>
+          </div>
+          <form class="newsletter-form" id="newsForm">
+            <input type="email" class="input" placeholder="you@scrapyard.io" required />
+            <button class="btn btn-primary" type="submit">Subscribe <span class="btn-arrow">→</span></button>
+          </form>
+          <div class="newsletter-ok" id="newsOk" hidden>⚡ You're on the list — first alpha drops soon.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#home" class="brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+            <path d="M16 2 29 9v14L16 30 3 23V9z" fill="none" stroke="url(#lg-brand)" stroke-width="2"/>
+            <path d="M18.5 8 11 18h4.2L13 24l8-10h-4.4z" fill="#22d3ee"/>
+          </svg>
+          <span class="brand-name">SCRAP<span class="brand-x">X</span></span>
+        </a>
+        <p>The Web3 scrap auction protocol.<br/>Transparent bids · Escrowed settlements · Tokenized receipts.</p>
+      </div>
+      <div class="footer-cols">
+        <div><h5>Protocol</h5><a href="#tokenomics">$SCRX Token</a><a href="#roadmap">Roadmap</a><a href="#lots">Lot registry</a></div>
+        <div><h5>Marketplace</h5><a href="#bidders">Bidders</a><a href="#lots">Auctions</a><a href="#community">Community</a></div>
+        <div><h5>Resources</h5><a href="#" onclick="return false">Docs</a><a href="#" onclick="return false">Audit reports</a><a href="#" onclick="return false">Brand kit</a></div>
+      </div>
+    </div>
+    <div class="container footer-base">
+      <span>© 2026 ScrapX Labs. Built for the scrap economy.</span>
+      <span class="mono footer-src">Data · MSTC Combined Bid Sheet 23.08.2026 · Auctions 21977–21980</span>
+    </div>
+  </footer>
+
+  <!-- lot detail modal -->
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="glass modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
